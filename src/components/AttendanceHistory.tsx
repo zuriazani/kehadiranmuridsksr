@@ -19,11 +19,6 @@ export const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({ allAttenda
   const [lastSync, setLastSync] = useState<string>(new Date().toLocaleTimeString());
   const [syncCount, setSyncCount] = useState(0);
 
-  const isDefaultUrl = useMemo(() => {
-    const resultsUrl = localStorage.getItem('sksr_config_results_url');
-    return !resultsUrl || resultsUrl.includes('2PACX-1vRL_Gj0-C1-8wW8N6f9b8U5j7_j3I0-k5v8n0');
-  }, []);
-
   const isAliran = (c: string): boolean => {
     const upper = c.toUpperCase();
     return upper.startsWith('TAHUN') || upper.startsWith('PRA');
@@ -166,14 +161,6 @@ export const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({ allAttenda
                Status: {isPulling ? 'Menyemak...' : `Data: ${syncCount} rekod`} ({lastSync})
              </p>
            </div>
-           {isDefaultUrl && (
-             <div className="flex items-center gap-2 bg-amber-50 p-1.5 md:p-2 rounded-lg border border-amber-100">
-               <Database size={8} className="text-amber-600" />
-               <p className="text-[7px] md:text-[8px] font-bold text-amber-700 uppercase">
-                 Amaran: URL Default dikesan. Sila semak Tetapan.
-               </p>
-             </div>
-           )}
         </div>
       </div>
 
