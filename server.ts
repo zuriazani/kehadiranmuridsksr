@@ -11,35 +11,46 @@ async function startServer() {
   const PORT = 3000;
 
   // API routes FIRST
-  app.get("/api/proxy", async (req, res) => {
-    const targetUrl = req.query.url as string;
-    if (!targetUrl) return res.status(400).send("URL is required");
-    try {
-      const response = await fetch(targetUrl);
-      if (!response.ok) {
-        throw new Error(`Target responded with ${response.status}`);
-      }
-      const data = await response.text();
-      res.send(data);
-    } catch (error: any) {
-      console.error("Proxy error (GET):", error);
-      res.status(500).send("Proxy error: " + error.message);
-    }
-  });
+  app.use(express.text({ type: '*/*', limit: '10mb' }));
+  app.use(express.json({ limit: '10mb' }));
 
-  app.post("/api/proxy", express.text({ type: '*/*' }), async (req, res) => {
+  app.all("/api/proxy", async (req, res) => {
     const targetUrl = req.query.url as string;
-    if (!targetUrl) return res.status(400).send("URL is required");
+    
+    if (req.method === 'OPTIONS') {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      return res.status(200).end();
+    }
+
+    if (!targetUrl) {
+      return res.status(400).send("URL is required");
+    }
+
     try {
-      const response = await fetch(targetUrl, {
-        method: "POST",
-        body: req.body,
-        headers: { "Content-Type": "text/plain;charset=utf-8" }
-      });
-      const data = await response.text();
-      res.send(data);
+      const method = req.method;
+      const contentType = req.headers["content-type"] || "text/plain;charset=utf-8";
+      
+      const fetchOptions: any = {
+        method: method,
+        headers: {
+          "Content-Type": contentType,
+        },
+        redirect: 'follow'
+      };
+
+      if (method !== 'GET' && method !== 'HEAD') {
+        fetchOptions.body = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+      }
+
+      const response = await fetch(targetUrl, fetchOptions);
+      const responseData = await response.text();
+      
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.status(response.status).send(responseData);
     } catch (error: any) {
-      console.error("Proxy error (POST):", error);
+      console.error("Proxy error:", error);
       res.status(500).send("Proxy error: " + error.message);
     }
   });
