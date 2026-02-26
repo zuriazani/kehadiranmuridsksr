@@ -7,7 +7,7 @@ const STORAGE_KEY = 'e_kehadiran_records';
 const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwflzWlW8bJMGSlclCtAQav9AXTWP-MbUhF77X6oQ9fxjXrhm1IzZp_HZ0pnh9r7y3u/exec'; 
 const DEFAULT_RESULTS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTpH8HxIyKbpZL3l_kx5H7cDccO22n94C5UyFFIopcT-BytZFlX8svGZha2M6UUNvD-HuHQfFj9Zxt1/pub?output=csv'; 
 
-const getUrls = () => ({
+export const getUrls = () => ({
   script: localStorage.getItem('sksr_config_script_url') || DEFAULT_SCRIPT_URL,
   results: localStorage.getItem('sksr_config_results_url') || DEFAULT_RESULTS_URL
 });
