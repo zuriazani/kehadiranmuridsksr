@@ -155,13 +155,20 @@ export const AttendancePrint: React.FC<AttendancePrintProps> = ({ records, stude
     >
       <style dangerouslySetInnerHTML={{ __html: `
         @media print {
-          @page { size: A4; margin: 1.5cm; }
-          body { background: white !important; color: black !important; }
+          @page { size: A4; margin: 1cm; }
+          body { background: white !important; color: black !important; font-family: sans-serif !important; }
           .no-print { display: none !important; }
-          .print-content { padding: 0 !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
-          table { width: 100% !important; border-collapse: collapse !important; }
-          th, td { border: 1px solid #e2e8f0 !important; }
+          .print-content { padding: 0 !important; margin: 0 !important; border: none !important; box-shadow: none !important; width: 100% !important; }
+          table { width: 100% !important; border-collapse: collapse !important; margin-top: 20px; }
+          th { border-bottom: 2px solid black !important; padding: 12px 4px !important; text-align: left !important; }
+          td { padding: 10px 4px !important; border-bottom: 1px solid #f1f5f9 !important; }
           .print-break-avoid { break-inside: avoid !important; }
+          .text-emerald-600 { color: #059669 !important; }
+          .text-red-500 { color: #ef4444 !important; }
+          .text-red-600 { color: #dc2626 !important; }
+          .text-indigo-600 { color: #4f46e5 !important; }
+          .text-slate-400 { color: #94a3b8 !important; }
+          .text-slate-500 { color: #64748b !important; }
         }
       ` }} />
       {/* Control Panel (Hidden on Print) */}
@@ -238,12 +245,12 @@ export const AttendancePrint: React.FC<AttendancePrintProps> = ({ records, stude
 
       {/* Report Preview / Print View */}
       <div ref={reportRef} className="bg-white p-6 md:p-12 rounded-[32px] md:rounded-[48px] shadow-2xl border border-slate-100 print:shadow-none print:border-none print:p-0 print-content">
-        <div className="text-center mb-8 md:mb-12 border-b-4 border-double border-slate-100 pb-8 md:pb-10">
-          <h1 className="text-xl md:text-3xl font-black text-slate-900 uppercase mb-2">
+        <div className="text-center mb-6 md:mb-8 pb-4 md:pb-6">
+          <h1 className="text-lg md:text-2xl font-black text-slate-900 uppercase mb-1">
             {reportType === 'Summary' ? 'Laporan Analisa Kehadiran Murid' : 'Laporan Analisa Murid Tidak Hadir'}
           </h1>
-          <h2 className="text-lg md:text-xl font-bold text-slate-600 uppercase mb-4">SK SIMPANG RENGAM</h2>
-          <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-[8px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest">
+          <h2 className="text-base md:text-lg font-bold text-slate-800 uppercase mb-4">SK SIMPANG RENGAM</h2>
+          <div className="flex flex-wrap justify-center gap-x-4 md:gap-x-6 gap-y-1 text-[7px] md:text-[9px] font-bold text-slate-500 uppercase tracking-tight">
             <span>Jenis: {reportType === 'Summary' ? 'RINGKASAN KELAS' : 'ANALISA KETIDAKHADIRAN'}</span>
             <span>Tempoh: {period === 'Daily' ? 'HARIAN' : period === 'Weekly' ? 'MINGGUAN' : period === 'Monthly' ? 'BULANAN' : 'TAHUNAN'}</span>
             <span>Tarikh: {new Date(selectedPrintDate).toLocaleDateString('ms-MY', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
@@ -255,22 +262,22 @@ export const AttendancePrint: React.FC<AttendancePrintProps> = ({ records, stude
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b-2 border-slate-900">
-                <th className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-black uppercase tracking-tighter">Bil</th>
+                <th className="py-3 px-2 text-[8px] md:text-[10px] font-black uppercase">Bil</th>
                 {reportType === 'Summary' ? (
                   <>
-                    <th className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-black uppercase tracking-tighter">Aliran</th>
-                    <th className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-black uppercase tracking-tighter">Kelas Terkini</th>
-                    <th className="py-4 px-2 md:px-4 text-center text-[9px] md:text-xs font-black uppercase tracking-tighter">Hadir</th>
-                    <th className="py-4 px-2 md:px-4 text-center text-[9px] md:text-xs font-black uppercase tracking-tighter">T. Hadir</th>
-                    <th className="py-4 px-2 md:px-4 text-center text-[9px] md:text-xs font-black uppercase tracking-tighter">Jumlah</th>
-                    <th className="py-4 px-2 md:px-4 text-right text-[9px] md:text-xs font-black uppercase tracking-tighter">Peratus (%)</th>
+                    <th className="py-3 px-2 text-[8px] md:text-[10px] font-black uppercase">Aliran</th>
+                    <th className="py-3 px-2 text-[8px] md:text-[10px] font-black uppercase">Kelas Terkini</th>
+                    <th className="py-3 px-2 text-center text-[8px] md:text-[10px] font-black uppercase">Hadir</th>
+                    <th className="py-3 px-2 text-center text-[8px] md:text-[10px] font-black uppercase">T. Hadir</th>
+                    <th className="py-3 px-2 text-center text-[8px] md:text-[10px] font-black uppercase">Jumlah</th>
+                    <th className="py-3 px-2 text-right text-[8px] md:text-[10px] font-black uppercase">Peratus (%)</th>
                   </>
                 ) : (
                   <>
-                    <th className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-black uppercase tracking-tighter">Nama Murid</th>
-                    <th className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-black uppercase tracking-tighter">Aliran</th>
-                    <th className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-black uppercase tracking-tighter">Kelas Terkini</th>
-                    <th className="py-4 px-2 md:px-4 text-right text-[9px] md:text-xs font-black uppercase tracking-tighter">Bil. T. Hadir</th>
+                    <th className="py-3 px-2 text-[8px] md:text-[10px] font-black uppercase">Nama Murid</th>
+                    <th className="py-3 px-2 text-[8px] md:text-[10px] font-black uppercase">Aliran</th>
+                    <th className="py-3 px-2 text-[8px] md:text-[10px] font-black uppercase">Kelas Terkini</th>
+                    <th className="py-3 px-2 text-right text-[8px] md:text-[10px] font-black uppercase">Bil. T. Hadir</th>
                   </>
                 )}
               </tr>
@@ -281,23 +288,23 @@ export const AttendancePrint: React.FC<AttendancePrintProps> = ({ records, stude
                   const perc = d.total > 0 ? (d.hadir / d.total) * 100 : 0;
                   return (
                     <tr key={i} className="print:break-inside-avoid">
-                      <td className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-bold text-slate-400">{i + 1}</td>
-                      <td className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-black text-slate-800 uppercase">{d.aliran}</td>
-                      <td className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-bold text-indigo-600 uppercase">{d.kelas}</td>
-                      <td className="py-4 px-2 md:px-4 text-center text-[9px] md:text-xs font-black text-emerald-600">{d.hadir}</td>
-                      <td className="py-4 px-2 md:px-4 text-center text-[9px] md:text-xs font-black text-red-500">{d.tidakHadir}</td>
-                      <td className="py-4 px-2 md:px-4 text-center text-[9px] md:text-xs font-bold text-slate-500">{d.total}</td>
-                      <td className="py-4 px-2 md:px-4 text-right text-[10px] md:text-sm font-black text-slate-900">{perc.toFixed(1)}%</td>
+                      <td className="py-3 px-2 text-[8px] md:text-[10px] font-bold text-slate-400">{i + 1}</td>
+                      <td className="py-3 px-2 text-[8px] md:text-[10px] font-black text-slate-800 uppercase">{d.aliran}</td>
+                      <td className="py-3 px-2 text-[8px] md:text-[10px] font-black text-indigo-600 uppercase">{d.kelas}</td>
+                      <td className="py-3 px-2 text-center text-[8px] md:text-[10px] font-black text-emerald-600">{d.hadir}</td>
+                      <td className="py-3 px-2 text-center text-[8px] md:text-[10px] font-black text-red-500">{d.tidakHadir}</td>
+                      <td className="py-3 px-2 text-center text-[8px] md:text-[10px] font-bold text-slate-400">{d.total}</td>
+                      <td className="py-3 px-2 text-right text-[9px] md:text-[11px] font-black text-slate-900">{perc.toFixed(1)}%</td>
                     </tr>
                   );
                 } else {
                   return (
                     <tr key={i} className="print:break-inside-avoid">
-                      <td className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-bold text-slate-400">{i + 1}</td>
-                      <td className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-black text-slate-800 uppercase">{d.namaMurid}</td>
-                      <td className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-bold text-slate-500 uppercase">{d.aliran}</td>
-                      <td className="py-4 px-2 md:px-4 text-[9px] md:text-xs font-bold text-indigo-600 uppercase">{d.kelasTerkini}</td>
-                      <td className="py-4 px-2 md:px-4 text-right text-[10px] md:text-sm font-black text-red-600">{d.absentCount} Hari</td>
+                      <td className="py-3 px-2 text-[8px] md:text-[10px] font-bold text-slate-400">{i + 1}</td>
+                      <td className="py-3 px-2 text-[8px] md:text-[10px] font-black text-slate-800 uppercase">{d.namaMurid}</td>
+                      <td className="py-3 px-2 text-[8px] md:text-[10px] font-bold text-slate-500 uppercase">{d.aliran}</td>
+                      <td className="py-3 px-2 text-[8px] md:text-[10px] font-black text-indigo-600 uppercase">{d.kelasTerkini}</td>
+                      <td className="py-3 px-2 text-right text-[9px] md:text-[11px] font-black text-red-600">{d.absentCount} Hari</td>
                     </tr>
                   );
                 }
@@ -305,12 +312,12 @@ export const AttendancePrint: React.FC<AttendancePrintProps> = ({ records, stude
             </tbody>
             {reportType === 'Summary' && reportData.length > 0 && (
               <tfoot>
-                <tr className="border-t-2 border-slate-900 bg-slate-50">
-                  <td colSpan={3} className="py-6 px-2 md:px-4 text-[9px] md:text-xs font-black uppercase tracking-widest">Jumlah Keseluruhan</td>
-                  <td className="py-6 px-2 md:px-4 text-center text-[9px] md:text-xs font-black">{(reportData as any[]).reduce((a, b) => a + b.hadir, 0)}</td>
-                  <td className="py-6 px-2 md:px-4 text-center text-[9px] md:text-xs font-black">{(reportData as any[]).reduce((a, b) => a + b.tidakHadir, 0)}</td>
-                  <td className="py-6 px-2 md:px-4 text-center text-[9px] md:text-xs font-black">{(reportData as any[]).reduce((a, b) => a + b.total, 0)}</td>
-                  <td className="py-6 px-2 md:px-4 text-right text-[10px] md:text-sm font-black">
+                <tr className="border-t-2 border-slate-900 bg-slate-50/50">
+                  <td colSpan={3} className="py-4 px-2 text-[8px] md:text-[10px] font-black uppercase tracking-widest">Jumlah Keseluruhan</td>
+                  <td className="py-4 px-2 text-center text-[8px] md:text-[10px] font-black text-emerald-600">{(reportData as any[]).reduce((a, b) => a + b.hadir, 0)}</td>
+                  <td className="py-4 px-2 text-center text-[8px] md:text-[10px] font-black text-red-500">{(reportData as any[]).reduce((a, b) => a + b.tidakHadir, 0)}</td>
+                  <td className="py-4 px-2 text-center text-[8px] md:text-[10px] font-black text-slate-400">{(reportData as any[]).reduce((a, b) => a + b.total, 0)}</td>
+                  <td className="py-4 px-2 text-right text-[9px] md:text-[11px] font-black text-slate-900">
                     {(() => {
                       const totalH = (reportData as any[]).reduce((a, b) => a + b.hadir, 0);
                       const totalT = (reportData as any[]).reduce((a, b) => a + b.total, 0);
