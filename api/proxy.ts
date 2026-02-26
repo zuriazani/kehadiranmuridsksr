@@ -1,19 +1,13 @@
-import express from "express";
 
-const app = express();
-
-// Middleware to parse text body (Google Script expects text/plain or JSON as string)
-app.use(express.text({ type: '*/*', limit: '10mb' }));
-app.use(express.json({ limit: '10mb' }));
-
-app.all("*", async (req, res) => {
+export default async function handler(req: any, res: any) {
   const targetUrl = req.query.url as string;
-  
-  // Handle CORS preflight
+
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
   if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     return res.status(200).end();
   }
 
@@ -22,36 +16,28 @@ app.all("*", async (req, res) => {
   }
 
   try {
-    console.log(`Proxying ${req.method} to: ${targetUrl}`);
-    
     const method = req.method;
     const contentType = req.headers["content-type"] || "text/plain;charset=utf-8";
     
-    const fetchOptions: RequestInit = {
+    const fetchOptions: any = {
       method: method,
       headers: {
         "Content-Type": contentType,
       },
-      redirect: 'follow' // Crucial for Google Apps Script redirects
+      redirect: 'follow'
     };
 
     if (method !== 'GET' && method !== 'HEAD') {
-      // Ensure body is a string
+      // Vercel handles body parsing. If it's already an object, stringify it.
       fetchOptions.body = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
-      console.log(`Sending body (length: ${fetchOptions.body.length})`);
     }
 
     const response = await fetch(targetUrl, fetchOptions);
     const responseData = await response.text();
     
-    console.log(`Target responded with status: ${response.status}`);
-    
-    res.setHeader('Access-Control-Allow-Origin', '*');
     res.status(response.status).send(responseData);
   } catch (error: any) {
-    console.error("Proxy error details:", error);
+    console.error("Proxy error:", error);
     res.status(500).send("Proxy error: " + error.message);
   }
-});
-
-export default app;
+}
