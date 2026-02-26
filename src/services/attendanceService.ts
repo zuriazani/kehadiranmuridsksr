@@ -85,8 +85,9 @@ export const fetchAttendanceFromCloud = async (): Promise<AttendanceRecord[]> =>
   if (!targetUrl || targetUrl.length < 30) return [];
 
   try {
-    // Fetch directly from Google Sheets (CORS is supported for published CSVs)
-    const response = await fetch(targetUrl);
+    // Use proxy to avoid CORS and 400 errors
+    const proxyUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}&t=${Date.now()}`;
+    const response = await fetch(proxyUrl);
     if (!response.ok) return [];
     
     let csvData = await response.text();

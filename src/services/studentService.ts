@@ -8,8 +8,9 @@ export const fetchStudents = async (): Promise<Student[]> => {
     const savedUrl = localStorage.getItem('sksr_config_student_url');
     const targetUrl = savedUrl || DEFAULT_STUDENT_URL;
     
-    // Fetch directly from Google Sheets (CORS is supported for published CSVs)
-    const response = await fetch(targetUrl);
+    // Use proxy to avoid CORS and 400 errors
+    const proxyUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}&t=${Date.now()}`;
+    const response = await fetch(proxyUrl);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
