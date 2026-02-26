@@ -142,8 +142,18 @@ export const syncToGoogleSheets = async (records: AttendanceRecord[]): Promise<b
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(records)
     });
-    return response.ok; 
-  } catch { return false; }
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Sync failed with status:', response.status, errorText);
+      return false;
+    }
+    
+    return true; 
+  } catch (error) { 
+    console.error('Sync error:', error);
+    return false; 
+  }
 };
 
 export const exportToCSV = (data: AttendanceRecord[], filename: string) => {
