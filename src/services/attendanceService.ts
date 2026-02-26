@@ -7,7 +7,7 @@ const STORAGE_KEY = 'e_kehadiran_records';
 const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwflzWlW8bJMGSlclCtAQav9AXTWP-MbUhF77X6oQ9fxjXrhm1IzZp_HZ0pnh9r7y3u/exec'; 
 const DEFAULT_RESULTS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTpH8HxIyKbpZL3l_kx5H7cDccO22n94C5UyFFIopcT-BytZFlX8svGZha2M6UUNvD-HuHQfFj9Zxt1/pub?output=csv'; 
 
-export const getUrls = () => ({
+const getUrls = () => ({
   script: localStorage.getItem('sksr_config_script_url') || DEFAULT_SCRIPT_URL,
   results: localStorage.getItem('sksr_config_results_url') || DEFAULT_RESULTS_URL
 });
@@ -88,7 +88,8 @@ export const fetchAttendanceFromCloud = async (): Promise<AttendanceRecord[]> =>
   if (!targetUrl || targetUrl.length < 30) return [];
 
   try {
-    const response = await fetch(`${targetUrl}${targetUrl.includes('?') ? '&' : '?'}t=${Date.now()}`);
+    const proxyUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}&t=${Date.now()}`;
+    const response = await fetch(proxyUrl);
     if (!response.ok) return [];
     
     let csvData = await response.text();
@@ -138,14 +139,13 @@ export const syncToGoogleSheets = async (records: AttendanceRecord[]): Promise<b
   const { script: targetUrl } = getUrls();
   if (!targetUrl || targetUrl.length < 20) return false;
   try {
-    await fetch(targetUrl, {
+    const proxyUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}`;
+    const response = await fetch(proxyUrl, {
       method: 'POST',
-      mode: 'no-cors',
-      cache: 'no-cache',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(records)
     });
-    return true; 
+    return response.ok; 
   } catch { return false; }
 };
 

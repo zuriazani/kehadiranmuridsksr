@@ -8,8 +8,12 @@ export const fetchStudents = async (): Promise<Student[]> => {
     // Ambil URL dari localStorage jika ada, jika tidak guna default
     const savedUrl = localStorage.getItem('sksr_config_student_url');
     const targetUrl = savedUrl || DEFAULT_STUDENT_URL;
+    const proxyUrl = `/api/proxy?url=${encodeURIComponent(targetUrl)}&t=${Date.now()}`;
 
-    const response = await fetch(`${targetUrl}${targetUrl.includes('?') ? '&' : '?'}t=${Date.now()}`);
+    const response = await fetch(proxyUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     const csvData = await response.text();
     
     // Detect if response is HTML (Google Sheets error or wrong link)
