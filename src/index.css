@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* Mobile Density Optimizations */
+@media (max-width: 640px) {
+  .mobile-compact-padding {
+    @apply !p-3;
+  }
+  .mobile-compact-gap {
+    @apply !gap-2;
+  }
+  .mobile-text-xs {
+    @apply !text-[9px];
+  }
+  .mobile-hide {
+    @apply !hidden;
+  }
+}
+
+.glass-card {
+  @apply bg-white/85 backdrop-blur-md border border-white/40;
+}
+
+.bg-gradient-futuristic {
+  @apply bg-linear-to-br from-[#1e3a8a] via-[#4f46e5] to-[#7c3aed];
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.neon-footer {
+  @apply bg-[#1e3a8a] border-t-2 border-[#38bdf8] relative;
+  box-shadow: 0 -10px 40px -10px rgba(56, 189, 248, 0.5);
+}
+
+.neon-text {
+  @apply text-white;
+  text-shadow: 0 0 5px #38bdf8, 0 0 10px #38bdf8;
+}
+
+.neon-line {
+  @apply h-0.5 bg-[#38bdf8] absolute top-0 left-0 right-0;
+  box-shadow: 0 0 20px #38bdf8;
+  animation: pulse-neon 3s infinite ease-in-out;
+}
+
+@keyframes pulse-neon {
+  0%, 100% { opacity: 1; transform: scaleX(1); }
+  50% { opacity: 0.5; transform: scaleX(0.99); }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+}
+
+/* Sticky Action Bar for Mobile */
+.mobile-sticky-bottom {
+  @apply fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-lg border-t border-slate-200 z-50 sm:static sm:bg-transparent sm:border-none sm:p-0;
+}
