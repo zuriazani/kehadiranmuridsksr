@@ -1,7 +1,6 @@
 
 import { Student } from '../types';
-
-const DEFAULT_STUDENT_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTpH8HxIyKbpZL3l_kx5H7cDccO22n94C5UyFFIopcT-BytZFlX8svGZha2M6UUNvD-HuHQfFj9Zxt1/pub?gid=1428785112&single=true&output=csv';
+import { DEFAULT_STUDENT_URL } from '../constants';
 
 export const fetchStudents = async (): Promise<Student[]> => {
   try {

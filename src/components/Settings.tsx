@@ -2,15 +2,16 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Save, Info, Settings as SettingsIcon } from 'lucide-react';
+import { DEFAULT_STUDENT_URL, DEFAULT_SCRIPT_URL, DEFAULT_RESULTS_URL } from '../constants';
 
 interface SettingsProps {
   onReset?: () => void;
 }
 
 export const Settings: React.FC<SettingsProps> = ({ onReset }) => {
-  const [studentUrl, setStudentUrl] = useState(localStorage.getItem('sksr_config_student_url') || '');
-  const [scriptUrl, setScriptUrl] = useState(localStorage.getItem('sksr_config_script_url') || '');
-  const [resultsUrl, setResultsUrl] = useState(localStorage.getItem('sksr_config_results_url') || '');
+  const [studentUrl, setStudentUrl] = useState(localStorage.getItem('sksr_config_student_url') || DEFAULT_STUDENT_URL);
+  const [scriptUrl, setScriptUrl] = useState(localStorage.getItem('sksr_config_script_url') || DEFAULT_SCRIPT_URL);
+  const [resultsUrl, setResultsUrl] = useState(localStorage.getItem('sksr_config_results_url') || DEFAULT_RESULTS_URL);
   const [saved, setSaved] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [password, setPassword] = useState('');

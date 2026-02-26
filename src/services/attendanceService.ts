@@ -1,11 +1,8 @@
 
 import { AttendanceRecord, AbsenceReason } from '../types';
+import { DEFAULT_SCRIPT_URL, DEFAULT_RESULTS_URL } from '../constants';
 
 const STORAGE_KEY = 'e_kehadiran_records';
-
-// Default placeholders
-const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymnGdJHbz3Kg2YOwP0Zts4VswLi8M15fXyJT54jIGYYIvaNDtnD9aQWG5z9DSIHrQn/exec'; 
-const DEFAULT_RESULTS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTpH8HxIyKbpZL3l_kx5H7cDccO22n94C5UyFFIopcT-BytZFlX8svGZha2M6UUNvD-HuHQfFj9Zxt1/pub?gid=1106758140&single=true&output=csv'; 
 
 export const getUrls = () => ({
   script: localStorage.getItem('sksr_config_script_url') || DEFAULT_SCRIPT_URL,
