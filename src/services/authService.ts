@@ -1,6 +1,4 @@
-
-import { Teacher, TeacherLog } from '../types';
-import { getUrls } from './attendanceService';
+import { Teacher } from '../types';
 
 const AUTH_KEY = 'sksr_auth_teacher';
 const TEACHERS_LOG_KEY = 'sksr_teachers_list';
@@ -21,13 +19,6 @@ export const loginTeacher = (nama: string, katalaluan: string): Teacher | null =
     }
     localStorage.setItem(TEACHERS_LOG_KEY, JSON.stringify(teachers));
     
-    // Sync to Google Sheets
-    syncTeacherLog({
-      nama: teacher.nama,
-      loginAt: teacher.lastLogin!,
-      type: 'LOGIN'
-    });
-    
     return teacher;
   }
   return null;
@@ -45,26 +36,4 @@ export const getCurrentTeacher = (): Teacher | null => {
 export const getTeachersList = (): Teacher[] => {
   const data = localStorage.getItem(TEACHERS_LOG_KEY);
   return data ? JSON.parse(data) : [];
-};
-
-export const syncTeacherLog = async (log: TeacherLog): Promise<boolean> => {
-  const { script: targetUrl } = getUrls();
-  if (!targetUrl || targetUrl.length < 20) return false;
-  try {
-    // We send it as an object with a specific action to help the Apps Script route it
-    await fetch(targetUrl, {
-      method: 'POST',
-      mode: 'no-cors',
-      cache: 'no-cache',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({
-        action: 'log_teacher',
-        sheetName: 'LOG_GURU',
-        ...log
-      })
-    });
-    return true;
-  } catch {
-    return false;
-  }
 };
