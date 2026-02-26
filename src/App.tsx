@@ -409,9 +409,9 @@ const App: React.FC = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 md:px-8 -mt-6 relative z-20 flex-grow pb-12">
-        <div className="glass-card rounded-[16px] md:rounded-[24px] p-1 flex gap-1 mb-4 md:mb-5 shadow-2xl max-w-6xl mx-auto no-print overflow-x-auto no-scrollbar border-white/50">
+        <div className="glass-card rounded-[16px] md:rounded-[24px] p-1 grid grid-cols-4 sm:flex sm:gap-1 mb-4 md:mb-5 shadow-2xl max-w-6xl mx-auto no-print border-white/50">
           {[
-            { id: 'attendance', label: 'PENANDAAN', icon: UserCheck },
+            { id: 'attendance', label: 'TANDA', icon: UserCheck },
             { id: 'analytics', label: 'ANALISA', icon: PieChart },
             { id: 'report', label: 'LAPORAN', icon: FileText },
             { id: 'history', label: 'ARKIB', icon: Database },
@@ -422,10 +422,10 @@ const App: React.FC = () => {
             <button 
               key={tab.id} 
               onClick={() => setActiveTab(tab.id as any)} 
-              className={`flex-1 flex flex-col items-center justify-center py-2 px-2 min-w-[65px] md:min-w-[85px] rounded-[12px] md:rounded-[20px] transition-all duration-500 ${activeTab === tab.id ? 'bg-indigo-600 text-white shadow-xl scale-[1.02]' : 'text-slate-400 hover:bg-white/60 hover:text-slate-700'}`}
+              className={`flex flex-col items-center justify-center py-2 px-1 rounded-[12px] md:rounded-[20px] transition-all duration-500 ${activeTab === tab.id ? 'bg-indigo-600 text-white shadow-xl scale-[1.02]' : 'text-slate-400 hover:bg-white/60 hover:text-slate-700'}`}
             >
-              <tab.icon size={14} className="mb-1 md:size-[18px]" />
-              <span className="text-[7px] md:text-[8px] font-black tracking-widest uppercase">{tab.label}</span>
+              <tab.icon size={12} className="mb-0.5 md:mb-1 md:size-[18px]" />
+              <span className="text-[6px] md:text-[8px] font-black tracking-widest uppercase">{tab.label}</span>
             </button>
           ))}
         </div>
@@ -486,22 +486,22 @@ const App: React.FC = () => {
               <div className="lg:col-span-4 bg-indigo-900 rounded-[20px] md:rounded-[24px] p-3 md:p-4 shadow-xl text-white flex flex-col justify-between relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-4 opacity-10"><Users size={32} className="md:size-[40px]" /></div>
                 <h3 className="text-[8px] md:text-[9px] font-black tracking-[0.15em] uppercase opacity-60 mb-2">Statistik Langsung</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  <div className="bg-white/10 p-1.5 md:p-2 rounded-lg">
-                    <p className="text-[6px] md:text-[7px] font-black opacity-60 uppercase mb-0.5">Jumlah</p>
-                    <p className="text-base md:text-lg font-black">{liveSummary.total}</p>
+                <div className="grid grid-cols-4 lg:grid-cols-4 gap-1.5 md:gap-2">
+                  <div className="bg-white/10 p-1 md:p-2 rounded-lg text-center">
+                    <p className="text-[5px] md:text-[7px] font-black opacity-60 uppercase mb-0.5">Jumlah</p>
+                    <p className="text-sm md:text-lg font-black">{liveSummary.total}</p>
                   </div>
-                  <div className="bg-emerald-500/20 p-1.5 md:p-2 rounded-lg border border-emerald-500/30">
-                    <p className="text-[6px] md:text-[7px] font-black text-emerald-300 uppercase mb-0.5">Hadir</p>
-                    <p className="text-base md:text-lg font-black text-emerald-400">{liveSummary.present}</p>
+                  <div className="bg-emerald-500/20 p-1 md:p-2 rounded-lg border border-emerald-500/30 text-center">
+                    <p className="text-[5px] md:text-[7px] font-black text-emerald-300 uppercase mb-0.5">Hadir</p>
+                    <p className="text-sm md:text-lg font-black text-emerald-400">{liveSummary.present}</p>
                   </div>
-                  <div className="bg-red-500/20 p-1.5 md:p-2 rounded-lg border border-red-500/30">
-                    <p className="text-[6px] md:text-[7px] font-black text-red-300 uppercase mb-0.5">T. Hadir</p>
-                    <p className="text-base md:text-lg font-black text-red-400">{liveSummary.absent}</p>
+                  <div className="bg-red-500/20 p-1 md:p-2 rounded-lg border border-red-500/30 text-center">
+                    <p className="text-[5px] md:text-[7px] font-black text-red-300 uppercase mb-0.5">T. Hadir</p>
+                    <p className="text-sm md:text-lg font-black text-red-400">{liveSummary.absent}</p>
                   </div>
-                  <div className="bg-indigo-500/20 p-1.5 md:p-2 rounded-lg border border-indigo-500/30">
-                    <p className="text-[6px] md:text-[7px] font-black text-indigo-300 uppercase mb-0.5">Peratus</p>
-                    <p className="text-base md:text-lg font-black text-indigo-300">{liveSummary.percentage.toFixed(1)}%</p>
+                  <div className="bg-indigo-500/20 p-1 md:p-2 rounded-lg border border-indigo-500/30 text-center">
+                    <p className="text-[5px] md:text-[7px] font-black text-indigo-300 uppercase mb-0.5">Peratus</p>
+                    <p className="text-sm md:text-lg font-black text-indigo-300">{liveSummary.percentage.toFixed(0)}%</p>
                   </div>
                 </div>
               </div>
@@ -572,16 +572,21 @@ const App: React.FC = () => {
         }} />}
       </main>
 
-      <footer className="neon-footer py-6 px-4 no-print mt-auto">
+      <footer className="neon-footer pt-3 pb-28 md:pb-3 px-4 no-print mt-auto">
         <div className="neon-line absolute top-0 left-0 right-0"></div>
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-center md:text-left">
-            <h4 className="neon-text text-base font-black tracking-widest uppercase mb-0.5">e-KEHADIRAN MURID SKSR</h4>
-            <p className="text-blue-200/50 font-bold text-[7px] tracking-[0.15em] uppercase">Digital Attendance Management System</p>
+        <div className="max-w-7xl mx-auto flex flex-col items-center text-center gap-2">
+          <div className="space-y-0">
+            <h4 className="text-[9px] md:text-[11px] font-black tracking-widest uppercase text-white">
+              <span className="text-yellow-400">e-KEHADIRAN</span> MURID SKSR
+            </h4>
+            <p className="text-white/60 font-bold text-[6px] md:text-[7px] tracking-[0.2em] uppercase">Digital Attendance Management System</p>
           </div>
-          <div className="text-center md:text-right">
-            <p className="text-white/40 text-[8px] font-black uppercase tracking-widest mb-1">Hak Cipta Terpelihara © : ZURI 2026</p>
-            <p className="text-white/20 text-[7px] font-black uppercase tracking-widest">SK SIMPANG REGGAM, JALAN RENGGAM KLUANG JOHOR</p>
+          
+          <div className="w-6 h-px bg-white/10"></div>
+          
+          <div className="space-y-0.5">
+            <p className="text-white/40 text-[6px] md:text-[8px] font-black uppercase tracking-widest">Hak Cipta Terpelihara © : ZURI 2026</p>
+            <p className="text-white/20 text-[5px] md:text-[7px] font-black uppercase tracking-widest">SK SIMPANG REGGAM, JALAN RENGGAM KLUANG JOHOR</p>
           </div>
         </div>
       </footer>

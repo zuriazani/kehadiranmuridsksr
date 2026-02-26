@@ -251,7 +251,7 @@ export const AttendancePrint: React.FC<AttendancePrintProps> = ({ records, stude
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto hidden md:block">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b-2 border-slate-900">
@@ -302,11 +302,6 @@ export const AttendancePrint: React.FC<AttendancePrintProps> = ({ records, stude
                   );
                 }
               })}
-              {reportData.length === 0 && (
-                <tr>
-                  <td colSpan={reportType === 'Summary' ? 7 : 5} className="py-20 text-center text-slate-400 font-black uppercase text-[10px]">Tiada data untuk tarikh/tempoh ini</td>
-                </tr>
-              )}
             </tbody>
             {reportType === 'Summary' && reportData.length > 0 && (
               <tfoot>
@@ -327,6 +322,53 @@ export const AttendancePrint: React.FC<AttendancePrintProps> = ({ records, stude
             )}
           </table>
         </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {reportData.map((d: any, i: number) => (
+            <div key={i} className="py-4 space-y-2">
+              {reportType === 'Summary' ? (
+                <>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="text-[10px] font-black text-slate-800 uppercase">{d.kelas}</h4>
+                      <p className="text-[8px] font-bold text-slate-400 uppercase">{d.aliran}</p>
+                    </div>
+                    <span className="text-[10px] font-black text-indigo-600">
+                      {((d.hadir / d.total) * 100).toFixed(1)}%
+                    </span>
+                  </div>
+                  <div className="flex gap-3 text-[8px] font-black uppercase">
+                    <span className="text-emerald-600">H: {d.hadir}</span>
+                    <span className="text-red-500">TH: {d.tidakHadir}</span>
+                    <span className="text-slate-400">J: {d.total}</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="text-[10px] font-black text-slate-800 uppercase leading-tight">{d.namaMurid}</h4>
+                      <p className="text-[8px] font-bold text-slate-400 uppercase">{d.idMurid}</p>
+                    </div>
+                    <span className="text-[10px] font-black text-red-600">
+                      {d.absentCount} HARI
+                    </span>
+                  </div>
+                  <div className="flex gap-2 text-[8px] font-bold uppercase text-slate-400">
+                    <span>{d.aliran}</span>
+                    <span>•</span>
+                    <span className="text-indigo-600">{d.kelasTerkini}</span>
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {reportData.length === 0 && (
+          <div className="py-20 text-center text-slate-400 font-black uppercase text-[10px]">Tiada data untuk tarikh/tempoh ini</div>
+        )}
 
         <div className="mt-16 md:mt-20 grid grid-cols-2 gap-10 md:gap-20 text-center opacity-0 print:opacity-100 h-0 overflow-hidden print:h-auto print:overflow-visible">
           <div className="border-t border-black pt-4">

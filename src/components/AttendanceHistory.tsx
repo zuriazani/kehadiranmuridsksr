@@ -188,7 +188,7 @@ export const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({ allAttenda
           <h3 className="font-black text-slate-800 text-[10px] md:text-xs tracking-widest uppercase">Pangkalan Data Pusat</h3>
           <span className="text-[7px] md:text-[9px] font-black bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full uppercase tracking-widest">{filterClass} • {filterDate}</span>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto hidden md:block">
           <table className="w-full text-left">
             <thead>
               <tr className="bg-slate-50/50 text-slate-400 text-[8px] md:text-[10px] font-black uppercase tracking-widest">
@@ -224,19 +224,44 @@ export const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({ allAttenda
                   </td>
                 </tr>
               ))}
-              {tableRecords.length === 0 && (
-                <tr>
-                  <td colSpan={5} className="py-12 md:py-24 text-center">
-                    <div className="flex flex-col items-center gap-2 md:gap-4">
-                      <Search size={32} className="md:size-[48px] text-slate-200" />
-                      <p className="text-slate-400 text-[9px] md:text-xs font-black uppercase tracking-widest">Tiada rekod</p>
-                    </div>
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
         </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {tableRecords.map((r, i) => (
+            <div key={i} className="p-4 space-y-2">
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <h4 className="text-[10px] font-black text-slate-800 uppercase leading-tight">{r.namaMurid}</h4>
+                  <p className="text-[8px] font-bold text-slate-400 uppercase">{r.idMurid}</p>
+                </div>
+                <span className={`text-[8px] font-black px-2 py-1 rounded uppercase ${r.status === 'Hadir' ? 'text-emerald-600 bg-emerald-50' : 'text-red-600 bg-red-50'}`}>
+                  {r.status}
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-[8px] font-bold uppercase tracking-tighter">
+                <div className="flex gap-2">
+                  <span className="text-slate-400">Kelas: <span className="text-slate-600">{getAliran(r.kelas)}</span></span>
+                  <span className="text-slate-400">Terkini: <span className="text-indigo-600">{r.kelasTerkini}</span></span>
+                </div>
+                {r.status === 'Tidak Hadir' && (
+                  <span className="text-red-500 italic">{r.sebab || 'Tiada Sebab'}</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {tableRecords.length === 0 && (
+          <div className="py-12 md:py-24 text-center">
+            <div className="flex flex-col items-center gap-2 md:gap-4">
+              <Search size={32} className="md:size-[48px] text-slate-200" />
+              <p className="text-slate-400 text-[9px] md:text-xs font-black uppercase tracking-widest">Tiada rekod</p>
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );

@@ -185,7 +185,7 @@ export const AttendanceReport: React.FC<AttendanceReportProps> = ({ records, stu
             <span className="text-[9px] font-black bg-slate-200 text-slate-600 px-3 py-1 rounded-full uppercase tracking-widest">Global</span>
           </div>
           <div className="p-4 flex-1">
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto hidden md:block">
               <table className="w-full">
                 <thead>
                   <tr className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
@@ -221,6 +221,31 @@ export const AttendanceReport: React.FC<AttendanceReportProps> = ({ records, stu
                   })}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-3">
+              {(Object.entries(reportData.streamStats) as [string, StatItem][]).sort((a, b) => a[0].localeCompare(b[0])).map(([aliran, stat]) => {
+                const perc = getPercentage(stat.present, stat.total);
+                const absent = stat.total - stat.present;
+                return (
+                  <div key={aliran} className="p-4 rounded-2xl border border-slate-100 space-y-2">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-black text-slate-800 text-xs uppercase">{aliran}</h4>
+                        <p className="text-[8px] text-slate-400 font-bold uppercase">{stat.students} Murid</p>
+                      </div>
+                      <span className={`px-2 py-1 rounded-lg text-[9px] font-black border ${getStatusColor(perc)}`}>
+                        {perc.toFixed(1)}%
+                      </span>
+                    </div>
+                    <div className="flex gap-3 text-[9px] font-black uppercase">
+                      <span className="text-emerald-600">Hadir: {stat.present}</span>
+                      <span className={absent > 0 ? 'text-red-600' : 'text-slate-400'}>T. Hadir: {absent}</span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
             {Object.keys(reportData.streamStats).length === 0 && (
               <div className="py-20 text-center">

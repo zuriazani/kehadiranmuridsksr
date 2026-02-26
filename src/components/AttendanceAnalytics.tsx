@@ -230,32 +230,34 @@ export const AttendanceAnalytics: React.FC<AnalyticsProps> = ({ records, student
             </div>
           </div>
 
-          <div className="lg:col-span-3 flex bg-slate-100 p-1 rounded-xl w-full">
-            {(['Daily', 'Weekly', 'Monthly'] as PeriodType[]).map((p) => (
-              <button
-                key={p}
-                onClick={() => setPeriod(p)}
-                className={`flex-1 py-2.5 rounded-lg text-[8px] font-black transition-all ${
-                  period === p ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                {p === 'Daily' ? 'HARIAN' : p === 'Weekly' ? 'MINGGU' : 'BULAN'}
-              </button>
-            ))}
-          </div>
+          <div className="lg:col-span-6 grid grid-cols-2 gap-2 w-full">
+            <div className="flex bg-slate-100 p-1 rounded-xl">
+              {(['Daily', 'Weekly', 'Monthly'] as PeriodType[]).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPeriod(p)}
+                  className={`flex-1 py-2.5 rounded-lg text-[8px] font-black transition-all ${
+                    period === p ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  {p === 'Daily' ? 'HARI' : p === 'Weekly' ? 'MGG' : 'BLN'}
+                </button>
+              ))}
+            </div>
 
-          <div className="lg:col-span-3 flex bg-slate-100 p-1 rounded-xl w-full">
-            {(['Aliran', 'Kelas'] as const).map((mode) => (
-              <button
-                key={mode}
-                onClick={() => setViewMode(mode)}
-                className={`flex-1 py-2.5 rounded-lg text-[8px] font-black transition-all ${
-                  viewMode === mode ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                {mode === 'Aliran' ? 'ALIRAN' : 'KELAS'}
-              </button>
-            ))}
+            <div className="flex bg-slate-100 p-1 rounded-xl">
+              {(['Aliran', 'Kelas'] as const).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => setViewMode(mode)}
+                  className={`flex-1 py-2.5 rounded-lg text-[8px] font-black transition-all ${
+                    viewMode === mode ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  {mode === 'Aliran' ? 'ALIRAN' : 'KELAS'}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="lg:col-span-12 mt-2">
@@ -289,13 +291,14 @@ export const AttendanceAnalytics: React.FC<AnalyticsProps> = ({ records, student
               <XAxis 
                 dataKey="name" 
                 stroke="#94a3b8" 
-                fontSize={8} 
+                fontSize={7} 
                 fontWeight="black" 
                 axisLine={false}
                 tickLine={false}
                 dy={10}
-                angle={viewMode === 'Kelas' ? -45 : 0}
-                textAnchor={viewMode === 'Kelas' ? 'end' : 'middle'}
+                interval={0}
+                angle={-45}
+                textAnchor="end"
               />
               <YAxis 
                 stroke="#94a3b8" 
@@ -379,14 +382,14 @@ export const AttendanceAnalytics: React.FC<AnalyticsProps> = ({ records, student
             <PieChartIcon size={16} className="text-indigo-500" />
             <h3 className="text-sm md:text-lg font-black text-slate-800 uppercase tracking-tight">Status Kehadiran</h3>
           </div>
-          <div className="h-48 md:h-72 flex flex-col items-center">
+          <div className="h-64 md:h-72 w-full flex flex-col items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={stats.distribution}
-                  innerRadius={50}
-                  outerRadius={70}
-                  paddingAngle={8}
+                  innerRadius="40%"
+                  outerRadius="60%"
+                  paddingAngle={5}
                   dataKey="value"
                   stroke="none"
                 >
@@ -395,13 +398,13 @@ export const AttendanceAnalytics: React.FC<AnalyticsProps> = ({ records, student
                   ))}
                 </Pie>
                 <Tooltip 
-                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 5px 10px -3px rgb(0 0 0 / 0.1)' }}
+                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 5px 10px -3px rgb(0 0 0 / 0.1)', fontSize: '10px' }}
                 />
                 <Legend 
                   verticalAlign="bottom" 
-                  height={30} 
+                  align="center"
                   iconType="circle"
-                  wrapperStyle={{ fontSize: '8px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}
+                  wrapperStyle={{ fontSize: '8px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', paddingTop: '10px' }}
                 />
               </PieChart>
             </ResponsiveContainer>
