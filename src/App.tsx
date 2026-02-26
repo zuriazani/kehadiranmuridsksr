@@ -152,7 +152,7 @@ const App: React.FC = () => {
     if (auth) setCurrentTeacher(auth);
     
     loadData(true);
-    const interval = setInterval(() => loadData(false), 30000); 
+    const interval = setInterval(() => loadData(false), 15000); 
     return () => clearInterval(interval);
   }, []);
 
@@ -399,10 +399,19 @@ const App: React.FC = () => {
             </div>
             <h1 className="text-base md:text-2xl font-black tracking-tighter uppercase mb-0.5 drop-shadow-md">e-KEHADIRAN MURID</h1>
             <p className="text-indigo-200 font-bold tracking-[0.2em] text-[7px] md:text-[11px] uppercase opacity-90 mb-1.5 md:mb-2">SK SIMPANG RENGAM • DIGITAL HUB</p>
-            <div className="bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 shadow-md">
+            <div className="bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 shadow-md flex items-center gap-3">
               <p className="text-[8px] md:text-xs font-black uppercase tracking-widest text-white flex items-center gap-1.5">
                 <Calendar size={10} className="text-indigo-300" /> {todayDisplay}
               </p>
+              <div className="w-px h-3 bg-white/20"></div>
+              <button 
+                onClick={() => loadData(false)}
+                disabled={isSyncing}
+                className={`flex items-center gap-1.5 text-[8px] md:text-xs font-black uppercase tracking-widest transition-all ${isSyncing ? 'text-indigo-300' : 'text-white hover:text-indigo-200 active:scale-95'}`}
+              >
+                <RefreshCw size={10} className={isSyncing ? 'animate-spin' : ''} />
+                {isSyncing ? 'Sync...' : 'Sync'}
+              </button>
             </div>
           </div>
         </div>

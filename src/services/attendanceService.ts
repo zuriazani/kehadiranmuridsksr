@@ -81,7 +81,35 @@ export const getAttendance = (): AttendanceRecord[] => {
 };
 
 export const fetchAttendanceFromCloud = async (): Promise<AttendanceRecord[]> => {
-  const { results: targetUrl } = getUrls();
+  const { results: targetUrl, script: scriptUrl } = getUrls();
+  
+  // Try fetching from Script URL first (action=read) for real-time data
+  if (scriptUrl && scriptUrl.length > 20) {
+    try {
+      const proxyUrl = `/api/proxy?url=${encodeURIComponent(scriptUrl + (scriptUrl.includes('?') ? '&' : '?') + 'action=read')}&t=${Date.now()}`;
+      const response = await fetch(proxyUrl);
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data) && data.length > 0) {
+          // Skip header if it exists
+          const rows = (data[0] && (data[0][0] === 'Tarikh' || data[0][0] === 'TARIKH')) ? data.slice(1) : data;
+          return rows.map((v: any[]) => {
+            if (v.length < 6 || !v[0] || !v[1]) return null;
+            const normalizedDate = normalizeDate(String(v[0]));
+            return {
+              tarikh: normalizedDate, idMurid: String(v[1]), namaMurid: String(v[2]), 
+              kelas: String(v[3]), kelasTerkini: String(v[4]),
+              status: (String(v[5]) === 'Hadir' ? 'Hadir' : 'Tidak Hadir') as any,
+              sebab: (v[6] || '') as AbsenceReason, catatan: v[7] || '', syncStatus: 'synced' as const
+            };
+          }).filter(r => r !== null) as AttendanceRecord[];
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to fetch from script, falling back to results URL', e);
+    }
+  }
+
   if (!targetUrl || targetUrl.length < 30) return [];
 
   try {
